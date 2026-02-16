@@ -1,7 +1,7 @@
 vm_name        = "SH01"
 admin_username = "azureadmin"
 
-rg_name        = "tim-group"
+rg_name        = "tim-group-sh-lab"
 location       = "westus"
 
 # New VNet
