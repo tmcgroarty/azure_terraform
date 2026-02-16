@@ -26,7 +26,6 @@ resource "random_string" "suffix" {
 }
 
 locals {
-  # Example: tim-sh01-a1b2c3
   name_prefix = "${var.name_prefix}-${var.vm_base_name}-${random_string.suffix.result}"
 
   rg_name     = "rg-${local.name_prefix}"
@@ -58,14 +57,11 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = var.subnet_prefixes
 }
 
-# (Optional but recommended) NSG for lab management
 resource "azurerm_network_security_group" "nsg" {
   name                = local.nsg_name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
 
-  # LAB default: open 22/443 from anywhere. If you want to lock it down later,
-  # we can switch source_address_prefix to your public IP /32.
   security_rule {
     name                       = "allow-ssh"
     priority                   = 100
@@ -134,10 +130,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "StandardSSD_LRS" # cheap SSD
+    storage_account_type = "StandardSSD_LRS"
   }
 
-  # Riverbed SteelHead Cloud RiOS 10.2.0a - x64 Gen2 (Marketplace)
   source_image_reference {
     publisher = "riverbed"
     offer     = "riverbed_steelhead_cloud_rios10"
@@ -145,20 +140,18 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  # Required for marketplace plan images
-plan {
-  publisher = "riverbed"
-  product   = "riverbed_steelhead_cloud_rios10"
-  name      = "riverbed-steelhead-cloud-rios10-2-0a"
+  plan {
+    publisher = "riverbed"
+    product   = "riverbed_steelhead_cloud_rios10"
+    name      = "riverbed-steelhead-cloud-rios10-2-0a"
+  }
 }
-
 
 resource "azurerm_managed_disk" "data_disk" {
   name                 = local.disk_name
   location             = var.location
   resource_group_name  = azurerm_resource_group.rg.name
-
-  storage_account_type = "StandardSSD_LRS" # cheap SSD
+  storage_account_type = "StandardSSD_LRS"
   create_option        = "Empty"
   disk_size_gb         = var.data_disk_size_gb
 }
@@ -166,9 +159,8 @@ resource "azurerm_managed_disk" "data_disk" {
 resource "azurerm_virtual_machine_data_disk_attachment" "attach" {
   managed_disk_id    = azurerm_managed_disk.data_disk.id
   virtual_machine_id = azurerm_linux_virtual_machine.vm.id
-
-  lun     = 0
-  caching = "ReadWrite"
+  lun                = 0
+  caching            = "ReadWrite"
 }
 
 output "resource_group_name" {
