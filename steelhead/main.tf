@@ -140,16 +140,16 @@ resource "azurerm_linux_virtual_machine" "vm" {
   # Riverbed SteelHead Cloud RiOS 10.2.0a - x64 Gen2 (Marketplace)
   source_image_reference {
     publisher = "riverbed"
-    offer     = "steelhead-cloud"
-    sku       = "rios-10_2_0a-x64-gen2"
+    offer     = "riverbed_steelhead_cloud_rios10"
+    sku       = "riverbed-steelhead-cloud-rios10-2-0a"
     version   = "latest"
   }
 
   # Required for marketplace plan images
   plan {
     publisher = "riverbed"
-    product   = "steelhead-cloud"
-    name      = "rios-10_2_0a-x64-gen2"
+    product   = "riverbed_steelconnect_sh"
+    name      = "riverbed-steelhead-cloud-rios10-2-0a"
   }
 }
 
