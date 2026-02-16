@@ -146,12 +146,12 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   # Required for marketplace plan images
-  plan {
-    publisher = "riverbed"
-    product   = "riverbed_steelconnect_sh"
-    name      = "riverbed-steelhead-cloud-rios10-2-0a"
-  }
+plan {
+  publisher = "riverbed"
+  product   = "riverbed_steelhead_cloud_rios10"
+  name      = "riverbed-steelhead-cloud-rios10-2-0a"
 }
+
 
 resource "azurerm_managed_disk" "data_disk" {
   name                 = local.disk_name
